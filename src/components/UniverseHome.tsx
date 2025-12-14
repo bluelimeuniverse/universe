@@ -114,9 +114,13 @@ const UniverseHome = () => {
                 <div className="text-center max-w-5xl mx-auto z-10">
                     <div className="mb-8 animate-fade-in flex justify-center">
                         {/* Fallback to text if image missing, or use Next Image */}
-                        <div className="h-[120px] w-[120px] flex items-center justify-center bg-transparent drop-shadow-[0_0_15px_rgba(0,255,0,0.3)] text-6xl">
-                            🍋
-                        </div>
+                        <Image
+                            src="/logoDEF120px.png"
+                            alt="BlueLime Universe Logo"
+                            width={120}
+                            height={120}
+                            className="object-contain drop-shadow-[0_0_15px_rgba(0,255,0,0.3)]"
+                        />
                     </div>
                     <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 leading-none">
                         <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 delay-100">
