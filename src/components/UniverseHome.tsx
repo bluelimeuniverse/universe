@@ -47,7 +47,7 @@ const UniverseHome = () => {
         {
             name: "EDITOR",
             icon: <Code className="h-12 w-12 text-orange-500 mb-6" />,
-            desc: "Build your dreams with our powerful code and no-code editors.",
+            desc: "Create your own wonderful landing page, or newsletter, or a simple, perfect form to create your mailing list, in the simplest and most intuitive way possible..",
             color: "orange",
             status: "COMING SOON",
             action: () => router.push('/editor')
