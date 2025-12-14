@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Cpu, Globe, Users, Rocket, Code, BarChart3, Mail, Zap } from "lucide-react";
+import { ArrowRight, Cpu, Globe, Users, Rocket, Code, BarChart3, Mail, Zap, PenTool } from "lucide-react";
 import CosmicBackground from "@/components/CosmicBackground";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -46,7 +46,7 @@ const UniverseHome = () => {
         },
         {
             name: "EDITOR",
-            icon: <Code className="h-12 w-12 text-orange-500 mb-6" />,
+            icon: <PenTool className="h-12 w-12 text-orange-500 mb-6" />,
             desc: "Create your own wonderful landing page, or newsletter, or a simple, perfect form to create your mailing list, in the simplest and most intuitive way possible..",
             color: "orange",
             status: "COMING SOON",
