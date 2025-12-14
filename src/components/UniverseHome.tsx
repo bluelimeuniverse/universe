@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Cpu, Globe, Users, Rocket, Code, BarChart3, Mail } from "lucide-react";
+import { ArrowRight, Cpu, Globe, Users, Rocket, Code, BarChart3, Mail, Zap } from "lucide-react";
 import CosmicBackground from "@/components/CosmicBackground";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
