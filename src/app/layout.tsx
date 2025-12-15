@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "BlueLime Universe",
   description: "We invent from nothing. We change lives with intellect.",
   icons: {
-    icon: "/logoDEF120px.png",
+    icon: "/icologo20px.png",
   },
 };
 
