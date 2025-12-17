@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Cpu, Globe, Users, Rocket, Code, BarChart3, Mail, Zap, PenTool } from "lucide-react";
+import { ArrowRight, Cpu, Globe, Users, Rocket, Code, BarChart3, Mail, Zap, PenTool, Menu, X } from "lucide-react";
 import CosmicBackground from "@/components/CosmicBackground";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -10,6 +10,7 @@ import Image from "next/image";
 const UniverseHome = () => {
     const router = useRouter();
     const observerRef = useRef<IntersectionObserver | null>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         observerRef.current = new IntersectionObserver((entries) => {
@@ -93,20 +94,51 @@ const UniverseHome = () => {
             {/* Navigation */}
             <nav className="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
                 <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                    <div></div>
+                    {/* Logo Mobile / Placeholder */}
+                    <div className="md:hidden text-white font-bold tracking-widest text-sm">
+                        BLUELIME
+                    </div>
+
+                    {/* Desktop Menu */}
                     <div className="hidden md:flex gap-8 text-sm font-medium text-gray-300">
                         <a href="#manifesto" className="hover:text-green-400 transition-colors">MANIFESTO</a>
                         <a href="#ecosystem" className="hover:text-blue-400 transition-colors">ECOSYSTEM</a>
                         <a href="#community" className="hover:text-green-400 transition-colors">COMMUNITY</a>
                     </div>
-                    <Button
-                        variant="outline"
-                        className="border-green-500 text-green-500 hover:bg-green-500 hover:text-black transition-all duration-300"
-                        onClick={() => router.push('/auth')}
-                    >
-                        JOIN THE TRIBE
-                    </Button>
+
+                    <div className="flex items-center gap-4">
+                        <Button
+                            variant="outline"
+                            className="hidden md:flex border-green-500 text-green-500 hover:bg-green-500 hover:text-black transition-all duration-300"
+                            onClick={() => router.push('/auth')}
+                        >
+                            JOIN THE TRIBE
+                        </Button>
+
+                        {/* Mobile Hamburger */}
+                        <button
+                            className="md:hidden text-white p-2"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        >
+                            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                        </button>
+                    </div>
                 </div>
+
+                {/* Mobile Menu Overlay */}
+                {isMobileMenuOpen && (
+                    <div className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl border-b border-white/10 p-6 flex flex-col gap-6 animate-in slide-in-from-top-5">
+                        <a href="#manifesto" className="text-xl font-bold text-white hover:text-green-500" onClick={() => setIsMobileMenuOpen(false)}>MANIFESTO</a>
+                        <a href="#ecosystem" className="text-xl font-bold text-white hover:text-blue-500" onClick={() => setIsMobileMenuOpen(false)}>ECOSYSTEM</a>
+                        <a href="#community" className="text-xl font-bold text-white hover:text-green-500" onClick={() => setIsMobileMenuOpen(false)}>COMMUNITY</a>
+                        <Button
+                            className="w-full bg-green-500 text-black hover:bg-green-400 font-bold mt-4"
+                            onClick={() => router.push('/auth')}
+                        >
+                            JOIN THE TRIBE
+                        </Button>
+                    </div>
+                )}
             </nav>
 
             {/* Hero Section */}
@@ -122,7 +154,7 @@ const UniverseHome = () => {
                             className="object-contain drop-shadow-[0_0_15px_rgba(0,255,0,0.3)]"
                         />
                     </div>
-                    <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 leading-none">
+                    <h1 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 leading-none">
                         <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 delay-100">
                             BLUELIME
                         </span>
@@ -147,11 +179,11 @@ const UniverseHome = () => {
             </section>
 
             {/* Manifesto Section */}
-            <section id="manifesto" className="py-32 bg-black/80 backdrop-blur-sm relative z-10">
+            <section id="manifesto" className="py-20 md:py-32 bg-black/80 backdrop-blur-sm relative z-10">
                 <div className="container mx-auto px-6">
                     <div className="grid md:grid-cols-2 gap-16 items-center">
                         <div>
-                            <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-tight reveal-on-scroll opacity-0 translate-x-[-50px] transition-all duration-1000">
+                            <h2 className="text-4xl md:text-7xl font-bold mb-8 leading-tight reveal-on-scroll opacity-0 translate-x-[-50px] transition-all duration-1000">
                                 WE DON'T JUST <br />
                                 <span className="text-blue-500">CONSUME.</span> <br />
                                 WE <span className="text-green-500">CREATE.</span>
@@ -172,7 +204,7 @@ const UniverseHome = () => {
             </section>
 
             {/* Ecosystem Grid */}
-            <section id="ecosystem" className="py-32 bg-zinc-950/80 backdrop-blur-sm relative z-10 border-t border-white/10">
+            <section id="ecosystem" className="py-20 md:py-32 bg-zinc-950/80 backdrop-blur-sm relative z-10 border-t border-white/10">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-20">
                         <h2 className="text-4xl md:text-5xl font-bold mb-4">THE ECOSYSTEM</h2>
@@ -233,7 +265,7 @@ const UniverseHome = () => {
 
             {/* Footer */}
             <footer className="bg-black py-12 border-t border-white/10">
-                <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
                     <div className="flex items-center gap-2">
 
                         <span className="text-gray-500 font-bold">BLUELIME UNIVERSE</span>
