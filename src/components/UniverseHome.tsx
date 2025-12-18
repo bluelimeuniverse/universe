@@ -145,27 +145,13 @@ const UniverseHome = () => {
             <section className="relative h-screen flex items-center justify-center px-6 pt-20">
                 <div className="text-center max-w-5xl mx-auto z-10">
                     <div className="mb-8 animate-fade-in flex justify-center">
-                        <div className="relative w-64 h-64 flex items-center justify-center">
-                            {/* Explosion GIF Background */}
-                            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                                <Image
-                                    src="/explode.gif"
-                                    alt="Explosion effect"
-                                    fill
-                                    className="object-contain opacity-90 transition-opacity"
-                                    unoptimized // Essential for GIFs in Next.js
-                                />
-                            </div>
-
-                            {/* Logo Foreground */}
-                            <Image
-                                src="/logoDEF120px.png"
-                                alt="BlueLime Universe Logo"
-                                width={130}
-                                height={130}
-                                className="relative z-10 object-contain drop-shadow-[0_0_25px_rgba(0,255,0,0.6)] animate-pulse-slow"
-                            />
-                        </div>
+                        <Image
+                            src="/logoDEF120px.png"
+                            alt="BlueLime Universe Logo"
+                            width={130}
+                            height={130}
+                            className="object-contain drop-shadow-[0_0_25px_rgba(0,255,0,0.6)] animate-pulse-slow"
+                        />
                     </div>
                     <h1 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 leading-none">
                         <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 delay-100">
