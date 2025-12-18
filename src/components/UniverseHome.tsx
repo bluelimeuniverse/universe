@@ -145,14 +145,27 @@ const UniverseHome = () => {
             <section className="relative h-screen flex items-center justify-center px-6 pt-20">
                 <div className="text-center max-w-5xl mx-auto z-10">
                     <div className="mb-8 animate-fade-in flex justify-center">
-                        {/* Fallback to text if image missing, or use Next Image */}
-                        <Image
-                            src="/logoDEF120px.png"
-                            alt="BlueLime Universe Logo"
-                            width={120}
-                            height={120}
-                            className="object-contain drop-shadow-[0_0_15px_rgba(0,255,0,0.3)]"
-                        />
+                        <div className="relative w-64 h-64 flex items-center justify-center">
+                            {/* Explosion GIF Background */}
+                            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                                <Image
+                                    src="/explode.gif"
+                                    alt="Explosion effect"
+                                    fill
+                                    className="object-contain opacity-90 transition-opacity"
+                                    unoptimized // Essential for GIFs in Next.js
+                                />
+                            </div>
+
+                            {/* Logo Foreground */}
+                            <Image
+                                src="/logoDEF120px.png"
+                                alt="BlueLime Universe Logo"
+                                width={130}
+                                height={130}
+                                className="relative z-10 object-contain drop-shadow-[0_0_25px_rgba(0,255,0,0.6)] animate-pulse-slow"
+                            />
+                        </div>
                     </div>
                     <h1 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 leading-none">
                         <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 delay-100">
@@ -182,19 +195,20 @@ const UniverseHome = () => {
             <section id="manifesto" className="py-20 md:py-32 bg-black/80 backdrop-blur-sm relative z-10">
                 <div className="container mx-auto px-6">
                     <div className="grid md:grid-cols-2 gap-16 items-center">
-                        <div>
-                            <h2 className="text-4xl md:text-7xl font-bold mb-8 leading-tight reveal-on-scroll opacity-0 translate-x-[-50px] transition-all duration-1000">
+                        <div className="text-center md:text-left">
+                            {/* Mobile: Smaller font, Fade + Slide Up. Desktop: Huge font, Slide from Left */}
+                            <h2 className="text-3xl md:text-7xl font-bold mb-8 leading-tight reveal-on-scroll opacity-0 translate-y-8 md:translate-y-0 md:translate-x-[-50px] transition-all duration-1000">
                                 WE DON'T JUST <br />
                                 <span className="text-blue-500">CONSUME.</span> <br />
                                 WE <span className="text-green-500">CREATE.</span>
                             </h2>
                         </div>
-                        <div className="space-y-8 text-lg text-gray-300 reveal-on-scroll opacity-0 translate-x-[50px] transition-all duration-1000">
-                            <p className="border-l-4 border-green-500 pl-6">
+                        <div className="space-y-8 text-lg text-gray-300 reveal-on-scroll opacity-0 translate-y-8 md:translate-y-0 md:translate-x-[50px] transition-all duration-1000">
+                            <p className="border-t-2 md:border-t-0 md:border-l-4 border-green-500 pt-4 md:pt-0 md:pl-6 text-left md:text-left">
                                 <strong className="text-white block mb-2 text-xl">The New Era of Work</strong>
                                 BlueLime Universe is not just a platform; it's a virtual coworking space. A dream. An ambition to help everyone find their place online.
                             </p>
-                            <p className="border-l-4 border-blue-500 pl-6">
+                            <p className="border-t-2 md:border-t-0 md:border-l-4 border-blue-500 pt-4 md:pt-0 md:pl-6 text-left md:text-left">
                                 <strong className="text-white block mb-2 text-xl">Collective Intelligence</strong>
                                 Our users exchange ideas, collaborate on projects, share resources, and earn together. We are creators of digital products ourselves, supporting you with passion and commitment.
                             </p>
@@ -289,6 +303,11 @@ const UniverseHome = () => {
           100% { background-position: 0% 50%; }
         }
         .animate-gradient { animation: gradient 4s ease infinite; }
+        @keyframes pulse-slow {
+          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 25px rgba(0,255,0,0.6)); }
+          50% { transform: scale(1.05); filter: drop-shadow(0 0 40px rgba(0,255,0,0.8)); }
+        }
+        .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
         .animate-in { opacity: 1 !important; transform: translate(0, 0) scale(1) !important; }
       `}</style>
         </div>
