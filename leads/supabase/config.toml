@@ -1,0 +1,13 @@
+project_id = "vpselawcoxswncpixrno"
+
+[functions.search-contacts]
+verify_jwt = false
+
+[functions.process-search-queue]
+verify_jwt = false
+
+[functions.validate-batch]
+verify_jwt = false
+
+[functions.check-validation-status]
+verify_jwt = false
