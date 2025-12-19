@@ -42,14 +42,14 @@ const Profile = () => {
         return;
       }
 
-      const { data, error } = await supabase
-        .from("profiles")
+      const { data, error }: any = await supabase
+        .from("profiles" as any)
         .select("*")
         .eq("id", user.id)
         .single();
 
       if (error) throw error;
-      
+
       // Get avatar_url from user metadata
       const avatarUrl = user.user_metadata?.avatar_url;
       setProfile({ ...data, avatar_url: avatarUrl });
@@ -70,7 +70,7 @@ const Profile = () => {
     setSaving(true);
     try {
       const { error } = await supabase
-        .from("profiles")
+        .from("profiles" as any)
         .update({
           full_name: profile.full_name,
           last_name: profile.last_name,
@@ -80,7 +80,7 @@ const Profile = () => {
           country: profile.country,
           company: profile.company,
           updated_at: new Date().toISOString(),
-        })
+        } as any)
         .eq("id", profile.id);
 
       if (error) throw error;
@@ -244,10 +244,10 @@ const Profile = () => {
                       <Label htmlFor="email">Email</Label>
                       <div className="relative">
                         <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input 
-                          id="email" 
-                          value={profile.email} 
-                          disabled 
+                        <Input
+                          id="email"
+                          value={profile.email}
+                          disabled
                           className="pl-9"
                         />
                       </div>
@@ -256,11 +256,11 @@ const Profile = () => {
                       <Label htmlFor="fullName">Nome Completo</Label>
                       <div className="relative">
                         <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input 
-                          id="fullName" 
-                          placeholder="Mario Rossi" 
+                        <Input
+                          id="fullName"
+                          placeholder="Mario Rossi"
                           value={profile.full_name || ''}
-                          onChange={(e) => setProfile({...profile, full_name: e.target.value})}
+                          onChange={(e) => setProfile({ ...profile, full_name: e.target.value })}
                           className="pl-9"
                         />
                       </div>
@@ -272,11 +272,11 @@ const Profile = () => {
                       <Label htmlFor="phone">Telefono</Label>
                       <div className="relative">
                         <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input 
-                          id="phone" 
-                          placeholder="+39 333 1234567" 
+                        <Input
+                          id="phone"
+                          placeholder="+39 333 1234567"
                           value={profile.phone || ''}
-                          onChange={(e) => setProfile({...profile, phone: e.target.value})}
+                          onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                           className="pl-9"
                         />
                       </div>
@@ -285,11 +285,11 @@ const Profile = () => {
                       <Label htmlFor="company">Azienda</Label>
                       <div className="relative">
                         <Building className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input 
-                          id="company" 
-                          placeholder="La Tua Azienda Srl" 
+                        <Input
+                          id="company"
+                          placeholder="La Tua Azienda Srl"
                           value={profile.company || ''}
-                          onChange={(e) => setProfile({...profile, company: e.target.value})}
+                          onChange={(e) => setProfile({ ...profile, company: e.target.value })}
                           className="pl-9"
                         />
                       </div>
@@ -300,11 +300,11 @@ const Profile = () => {
                     <Label htmlFor="address">Indirizzo</Label>
                     <div className="relative">
                       <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input 
-                        id="address" 
-                        placeholder="Via Roma 1" 
+                      <Input
+                        id="address"
+                        placeholder="Via Roma 1"
                         value={profile.address || ''}
-                        onChange={(e) => setProfile({...profile, address: e.target.value})}
+                        onChange={(e) => setProfile({ ...profile, address: e.target.value })}
                         className="pl-9"
                       />
                     </div>
@@ -313,20 +313,20 @@ const Profile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="city">Città</Label>
-                      <Input 
-                        id="city" 
-                        placeholder="Milano" 
+                      <Input
+                        id="city"
+                        placeholder="Milano"
                         value={profile.city || ''}
-                        onChange={(e) => setProfile({...profile, city: e.target.value})}
+                        onChange={(e) => setProfile({ ...profile, city: e.target.value })}
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="country">Paese</Label>
-                      <Input 
-                        id="country" 
-                        placeholder="Italia" 
+                      <Input
+                        id="country"
+                        placeholder="Italia"
                         value={profile.country || ''}
-                        onChange={(e) => setProfile({...profile, country: e.target.value})}
+                        onChange={(e) => setProfile({ ...profile, country: e.target.value })}
                       />
                     </div>
                   </div>

@@ -112,10 +112,10 @@ export default function Pricing() {
 
   const fetchPlans = async () => {
     try {
-      const { data, error } = await supabase
-        .from('plans')
+      const { data, error }: any = await supabase
+        .from('plans' as any)
         .select('*')
-        .order('monthly_price', { ascending: true });
+        .order('monthly_price' as any, { ascending: true });
 
       if (error) {
         console.warn('Could not fetch plans from DB, using fallback:', error);
@@ -137,9 +137,9 @@ export default function Pricing() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const { data } = await supabase
-      .from('profiles')
-      .select('plan_id')
+    const { data }: any = await supabase
+      .from('profiles' as any)
+      .select('plan_id' as any)
       .eq('id', user.id)
       .single();
 
@@ -152,7 +152,7 @@ export default function Pricing() {
     setUpgrading(planId);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         navigate('/auth');
         return;
@@ -161,11 +161,11 @@ export default function Pricing() {
       // In a real application, this would redirect to a payment processor (Stripe, etc.)
       // For this demo, we'll directly update the user's plan
       const { error } = await supabase
-        .from('profiles')
-        .update({ 
+        .from('profiles' as any)
+        .update({
           plan_id: planId,
           updated_at: new Date().toISOString()
-        })
+        } as any)
         .eq('id', user.id);
 
       if (error) throw error;
@@ -175,11 +175,11 @@ export default function Pricing() {
         title: "Successo!",
         description: "Il tuo piano è stato aggiornato con successo.",
       });
-      
+
       setIsDialogOpen(false);
       // Refresh the page or state to reflect changes
       window.location.reload();
-      
+
     } catch (error) {
       console.error('Error upgrading plan:', error);
       toast({
@@ -232,9 +232,9 @@ export default function Pricing() {
 
   return (
     <div className="container mx-auto py-10 px-4">
-      <Button 
-        variant="ghost" 
-        onClick={() => navigate("/validate")} 
+      <Button
+        variant="ghost"
+        onClick={() => navigate("/validate")}
         className="mb-6"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -269,16 +269,16 @@ export default function Pricing() {
                   <li className="flex items-center">
                     <Check className="h-4 w-4 mr-2 text-green-500" />
                     <span className="text-sm">
-                      {plan.monthly_search_limit === -1 
-                        ? "Ricerche illimitate" 
+                      {plan.monthly_search_limit === -1
+                        ? "Ricerche illimitate"
                         : `${plan.monthly_search_limit?.toLocaleString() || 0} ricerche/mese`}
                     </span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 mr-2 text-green-500" />
                     <span className="text-sm">
-                      {plan.validation_limit === -1 
-                        ? "Validazioni email illimitate" 
+                      {plan.validation_limit === -1
+                        ? "Validazioni email illimitate"
                         : `Fino a ${plan.validation_limit.toLocaleString()} validazioni email/mese`}
                     </span>
                   </li>
@@ -300,8 +300,8 @@ export default function Pricing() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button 
-                  className="w-full" 
+                <Button
+                  className="w-full"
                   variant={isCurrentPlan ? "outline" : "default"}
                   disabled={isCurrentPlan || upgrading === plan.id}
                   onClick={() => openUpgradeModal(plan)}
@@ -323,20 +323,20 @@ export default function Pricing() {
               Scegli il metodo di pagamento per attivare il piano {selectedPlan?.name}.
             </DialogDescription>
           </DialogHeader>
-          
+
           <Tabs defaultValue="code" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="code">Codice Promo</TabsTrigger>
               <TabsTrigger value="card">Carta di Credito</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="code" className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="promo">Inserisci Codice</Label>
                 <div className="flex gap-2">
-                  <Input 
-                    id="promo" 
-                    placeholder="Es. BLUELIME" 
+                  <Input
+                    id="promo"
+                    placeholder="Es. BLUELIME"
                     value={promoCode}
                     onChange={(e) => setPromoCode(e.target.value)}
                   />
@@ -349,7 +349,7 @@ export default function Pricing() {
                 </p>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="card" className="space-y-4 py-4">
               <div className="p-4 border rounded-lg bg-muted/50 text-center space-y-3">
                 <CreditCard className="h-10 w-10 mx-auto text-muted-foreground" />

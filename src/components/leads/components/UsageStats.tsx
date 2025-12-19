@@ -41,20 +41,20 @@ export function UsageStats() {
       if (!user) return;
 
       // Get profile to know the plan
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('plan_id')
+      const { data: profile }: any = await supabase
+        .from('profiles' as any)
+        .select('plan_id' as any)
         .eq('id', user.id)
         .single();
 
       if (profile) {
         // Get plan details
-        const { data: planData } = await supabase
-          .from('plans')
+        const { data: planData }: any = await supabase
+          .from('plans' as any)
           .select('*')
-          .eq('id', profile.plan_id)
+          .eq('id', (profile as any).plan_id)
           .single();
-        
+
         setPlan(planData);
       }
 
@@ -62,12 +62,12 @@ export function UsageStats() {
       // We need to find the active usage record. 
       // Since we don't have a simple "get current" RPC, we query by date
       const now = new Date().toISOString();
-      const { data: usageData } = await supabase
-        .from('usage_records')
+      const { data: usageData }: any = await supabase
+        .from('usage_records' as any)
         .select('*')
         .eq('user_id', user.id)
-        .lte('period_start', now)
-        .gte('period_end', now)
+        .lte('period_start' as any, now)
+        .gte('period_end' as any, now)
         .single();
 
       if (usageData) {
@@ -75,14 +75,14 @@ export function UsageStats() {
       } else {
         // Fallback if no record found (e.g. new user before trigger ran or edge case)
         // Try to fetch the latest record
-        const { data: latestUsage } = await supabase
-          .from('usage_records')
+        const { data: latestUsage }: any = await supabase
+          .from('usage_records' as any)
           .select('*')
           .eq('user_id', user.id)
-          .order('period_start', { ascending: false })
+          .order('period_start' as any, { ascending: false })
           .limit(1)
           .single();
-          
+
         if (latestUsage) setUsage(latestUsage);
       }
 
@@ -107,7 +107,7 @@ export function UsageStats() {
 
   const emailLimit = plan.monthly_email_limit === -1 ? Infinity : plan.monthly_email_limit;
   const validationLimit = plan.validation_limit === -1 ? Infinity : plan.validation_limit;
-  
+
   const emailPercent = emailLimit === Infinity ? 0 : Math.min(100, (usage.emails_found_count / emailLimit) * 100);
   const validationPercent = validationLimit === Infinity ? 0 : Math.min(100, (usage.validations_performed_count / validationLimit) * 100);
 
@@ -117,7 +117,7 @@ export function UsageStats() {
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle 
+          <CardTitle
             className="text-lg font-medium cursor-pointer hover:underline"
             onClick={() => navigate('/pricing')}
           >
@@ -154,11 +154,11 @@ export function UsageStats() {
           </div>
           <Progress value={validationPercent} className="h-2" />
         </div>
-        
+
         <div className="pt-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="w-full gap-2"
             onClick={() => navigate('/pricing')}
           >
