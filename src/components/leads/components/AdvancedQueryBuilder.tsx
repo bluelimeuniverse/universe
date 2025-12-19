@@ -31,7 +31,7 @@ interface QueryTemplate {
   query_pattern: string;
   default_pages: number;
   created_at: string;
-  user_id: string;
+  user_id: string | null;
 }
 
 interface AdvancedQueryBuilderProps {
@@ -66,7 +66,7 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
       .from('query_templates')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (!error && data) {
       setTemplates(data);
     }
@@ -83,7 +83,7 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
     }
 
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     const { error } = await supabase
       .from('query_templates')
       .insert({
@@ -194,10 +194,10 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
   };
 
   // Helper: default email providers when searching social without providers
-  const SOCIAL_DOMAINS = ['instagram.com','facebook.com','linkedin.com','tiktok.com'];
+  const SOCIAL_DOMAINS = ['instagram.com', 'facebook.com', 'linkedin.com', 'tiktok.com'];
   const getEffectiveEmailProviders = (current: string[], sites: string[]) => {
     const hasSocial = sites?.some((w) => SOCIAL_DOMAINS.includes(w.toLowerCase()));
-    return hasSocial && (!current || current.length === 0) ? ['@gmail.com','@yahoo.com'] : current;
+    return hasSocial && (!current || current.length === 0) ? ['@gmail.com', '@yahoo.com'] : current;
   };
 
   const generateQuery = () => {
@@ -206,7 +206,7 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
 
     if (keyword) searchQueryParts.push(keyword);
     if (location) searchQueryParts.push(`"${location}"`);
-    
+
     // site: filters
     if (websites.length > 0) {
       const sitePart = websites.map(w => `site:${w}`).join(" OR ");
@@ -240,7 +240,7 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
       const namesPart = targetNames.map(n => `"${n}"`).join(' OR ');
       searchQueryParts.push(`(${namesPart})`);
     }
-    
+
     const realQuery = searchQueryParts.join(' ');
     setGeneratedQuery(realQuery);
     onQueryGenerated(realQuery);
@@ -250,7 +250,7 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
     if (!keyword) {
       return;
     }
-    
+
     // Generate query if not already generated
     let queryToSend = generatedQuery;
     if (!queryToSend) {
@@ -284,9 +284,9 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
       }
       queryToSend = parts.join(' ');
     }
-    
+
     console.log('Sending query to backend:', queryToSend);
-    
+
     // Pass the FULL query to backend
     const effectiveProvidersFinal = getEffectiveEmailProviders(emailProviders, websites);
     const searchParams = {
@@ -319,7 +319,7 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
             <FolderOpen className="h-5 w-5 text-primary" />
             <Label className="text-lg font-semibold">Template Salvati</Label>
           </div>
-          
+
           {templates.length > 0 && (
             <div className="space-y-2">
               <Label>Carica un template</Label>
@@ -484,8 +484,8 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
         </div>
 
         <Button
-          onClick={generateQuery} 
-          className="w-full bg-primary hover:bg-primary/90" 
+          onClick={generateQuery}
+          className="w-full bg-primary hover:bg-primary/90"
           size="lg"
         >
           <Search className="mr-2 h-5 w-5" />
@@ -522,9 +522,9 @@ export const AdvancedQueryBuilder = ({ onQueryGenerated, onSearch }: AdvancedQue
               </p>
             </div>
 
-            <Button 
+            <Button
               onClick={executeSearch}
-              className="w-full bg-secondary hover:bg-secondary/90 text-lg font-semibold" 
+              className="w-full bg-secondary hover:bg-secondary/90 text-lg font-semibold"
               size="lg"
             >
               <Search className="mr-2 h-6 w-6" />
