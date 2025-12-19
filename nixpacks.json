@@ -5,8 +5,7 @@
     "phases": {
         "setup": {
             "nixPkgs": [
-                "nodejs",
-                "npm"
+                "nodejs"
             ]
         },
         "build": {
