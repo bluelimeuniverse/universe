@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run build:leads && next build",
-    "build:leads": "cd leads && npm install && npm run build && mkdir -p ../public/leads && cp -r dist/* ../public/leads/",
+    "build": "node scripts/build-leads.js && next build",
     "start": "next start",
     "lint": "eslint"
   },
