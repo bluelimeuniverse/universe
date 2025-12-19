@@ -5,7 +5,7 @@
     "phases": {
         "setup": {
             "nixPkgs": [
-                "nodejs-20_x",
+                "nodejs",
                 "npm"
             ]
         },
