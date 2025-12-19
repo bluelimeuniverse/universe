@@ -40,7 +40,7 @@ export default function BatchManager() {
   const [batches, setBatches] = useState<Batch[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  
+
   // Form state
   const [batchName, setBatchName] = useState("");
   const [batchDescription, setBatchDescription] = useState("");
@@ -49,17 +49,17 @@ export default function BatchManager() {
 
   useEffect(() => {
     loadBatches();
-    
+
     // NO auto-refresh! Ricaricare solo manualmente per ridurre le query
     // Se serve vedere gli aggiornamenti in tempo reale, l'utente usa il bottone Ricarica
   }, []);
 
   const loadBatches = async () => {
     try {
-      const { data, error } = await supabase
-        .from('search_batches')
+      const { data, error }: any = await supabase
+        .from('search_batches' as any)
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at' as any, { ascending: false });
 
       if (error) throw error;
       setBatches(data || []);
@@ -116,7 +116,7 @@ export default function BatchManager() {
 
     try {
       let jobs: Job[] = [];
-      
+
       // Parsing CSV solo se presente - supporta virgolette per campi con virgole
       if (csvContent.trim()) {
         const normalized = csvContent.replace(/\uFEFF/g, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
@@ -209,15 +209,15 @@ export default function BatchManager() {
       if (!user) throw new Error('User not authenticated');
 
       // Crea il batch
-      const { data: batch, error: batchError } = await supabase
-        .from('search_batches')
+      const { data: batch, error: batchError }: any = await supabase
+        .from('search_batches' as any)
         .insert({
           name: batchName,
           description: batchDescription,
           total_jobs: jobs.length,
           delay_seconds: delaySeconds,
           user_id: user.id,
-        })
+        } as any)
         .select()
         .single();
 
@@ -232,15 +232,15 @@ export default function BatchManager() {
         }));
 
         const { error: jobsError } = await supabase
-          .from('search_jobs')
-          .insert(jobsToInsert);
+          .from('search_jobs' as any)
+          .insert(jobsToInsert as any);
 
         if (jobsError) throw jobsError;
       }
 
       toast({
         title: "Successo",
-        description: jobs.length > 0 
+        description: jobs.length > 0
           ? `Batch "${batchName}" creato con ${jobs.length} ricerche`
           : `Batch "${batchName}" creato (vuoto)`,
       });
@@ -265,12 +265,12 @@ export default function BatchManager() {
   const startBatch = async (batchId: string) => {
     try {
       await supabase
-        .from('search_batches')
-        .update({ 
+        .from('search_batches' as any)
+        .update({
           status: 'running',
           started_at: new Date().toISOString()
-        })
-        .eq('id', batchId);
+        } as any)
+        .eq('id' as any, batchId);
 
       toast({
         title: "Batch avviato",
@@ -295,9 +295,9 @@ export default function BatchManager() {
   const pauseBatch = async (batchId: string) => {
     try {
       await supabase
-        .from('search_batches')
-        .update({ status: 'paused' })
-        .eq('id', batchId);
+        .from('search_batches' as any)
+        .update({ status: 'paused' } as any)
+        .eq('id' as any, batchId);
 
       toast({
         title: "Batch in pausa",
@@ -320,9 +320,9 @@ export default function BatchManager() {
 
     try {
       await supabase
-        .from('search_batches')
+        .from('search_batches' as any)
         .delete()
-        .eq('id', batchId);
+        .eq('id' as any, batchId);
 
       toast({
         title: "Batch eliminato",
@@ -358,7 +358,7 @@ export default function BatchManager() {
 "marketing agentur (site:linkedin.com) (""@gmail.com"")",Berlin,10,""
 "werbeagentur (site:facebook.com) (""@gmail.com"")",München,10,"maria|sara|laura"
 "digital marketing",Hamburg,10,""`;
-      
+
       const blob = new Blob([template], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -371,11 +371,11 @@ export default function BatchManager() {
 
   const exportBatchJobs = async (batchId: string, batchName: string) => {
     try {
-      const { data: jobs, error } = await supabase
-        .from('search_jobs')
-        .select('query, location, pages')
-        .eq('batch_id', batchId)
-        .order('created_at', { ascending: true });
+      const { data: jobs, error }: any = await supabase
+        .from('search_jobs' as any)
+        .select('query, location, pages' as any)
+        .eq('batch_id' as any, batchId)
+        .order('created_at' as any, { ascending: true });
 
       if (error) throw error;
 
@@ -533,10 +533,9 @@ export default function BatchManager() {
                     </Button>
                   </div>
                 </div>
-                
-                <div className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                  csvContent ? 'border-secondary bg-secondary/10' : 'border-border'
-                }`}>
+
+                <div className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${csvContent ? 'border-secondary bg-secondary/10' : 'border-border'
+                  }`}>
                   <Upload className={`mx-auto h-12 w-12 mb-4 ${csvContent ? 'text-secondary' : 'text-muted-foreground'}`} />
                   <Label htmlFor="csvFile" className="cursor-pointer">
                     <span className="text-primary hover:underline font-medium">
@@ -565,13 +564,13 @@ export default function BatchManager() {
 
               {/* Action Buttons */}
               <div className="flex gap-2 pt-4 border-t">
-                <Button 
-                  onClick={createBatch} 
+                <Button
+                  onClick={createBatch}
                   className="flex-1 bg-primary hover:bg-primary/90"
                   disabled={!batchName.trim()}
                 >
-                  {!batchName.trim() ? 
-                    '⚠️ Inserisci il nome del batch' : 
+                  {!batchName.trim() ?
+                    '⚠️ Inserisci il nome del batch' :
                     csvContent.trim() ? '✓ Crea Batch con CSV' : '✓ Crea Batch Vuoto'
                   }
                 </Button>
@@ -625,7 +624,7 @@ export default function BatchManager() {
                       </div>
 
                       <div className="flex gap-2 flex-wrap">
-                        <Button 
+                        <Button
                           onClick={() => navigate(`/batch/${batch.id}`)}
                           size="sm"
                           variant="default"
@@ -640,7 +639,7 @@ export default function BatchManager() {
                             Avvia
                           </Button>
                         ) : null}
-                        
+
                         {batch.status === 'running' && (
                           <Button onClick={() => pauseBatch(batch.id)} size="sm" variant="outline">
                             <Pause className="mr-2 h-4 w-4" />
@@ -648,18 +647,18 @@ export default function BatchManager() {
                           </Button>
                         )}
 
-                        <Button 
+                        <Button
                           onClick={() => exportBatchJobs(batch.id, batch.name)}
-                          size="sm" 
+                          size="sm"
                           variant="outline"
                         >
                           <FileDown className="mr-2 h-4 w-4" />
                           Esporta CSV
                         </Button>
 
-                        <Button 
-                          onClick={() => deleteBatch(batch.id)} 
-                          size="sm" 
+                        <Button
+                          onClick={() => deleteBatch(batch.id)}
+                          size="sm"
                           variant="destructive"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />

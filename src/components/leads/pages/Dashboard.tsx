@@ -32,9 +32,9 @@ const Dashboard = () => {
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const [contactsRes, searchesRes] = await Promise.all([
-        supabase.from('contacts').select('id', { count: 'exact', head: true }),
-        supabase.from('searches').select('id', { count: 'exact', head: true })
+      const [contactsRes, searchesRes]: any[] = await Promise.all([
+        supabase.from('contacts' as any).select('id', { count: 'exact', head: true }),
+        supabase.from('searches' as any).select('id', { count: 'exact', head: true })
       ]);
 
       setContactsCount(contactsRes.count || 0);
@@ -82,7 +82,7 @@ const Dashboard = () => {
                 <span className="text-secondary">→</span> Azioni Rapide
               </h2>
               <div className="grid gap-4 md:grid-cols-4">
-                <Button 
+                <Button
                   onClick={() => navigate('/search')}
                   size="lg"
                   className="h-24 bg-primary hover:bg-primary/90 text-lg font-semibold"
@@ -90,7 +90,7 @@ const Dashboard = () => {
                   <Search className="mr-3 h-6 w-6" />
                   Nuova Ricerca
                 </Button>
-                <Button 
+                <Button
                   onClick={() => navigate('/batch')}
                   size="lg"
                   className="h-24 bg-secondary hover:bg-secondary/90 text-lg font-semibold"
@@ -98,7 +98,7 @@ const Dashboard = () => {
                   <Zap className="mr-3 h-6 w-6" />
                   Batch Manager
                 </Button>
-                <Button 
+                <Button
                   onClick={() => navigate('/guide')}
                   size="lg"
                   variant="outline"
@@ -107,7 +107,7 @@ const Dashboard = () => {
                   <BookOpen className="mr-3 h-6 w-6" />
                   Guida Utente
                 </Button>
-                <Button 
+                <Button
                   onClick={() => navigate('/validate')}
                   size="lg"
                   className="h-24 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-lg font-semibold relative overflow-hidden"
@@ -123,7 +123,7 @@ const Dashboard = () => {
 
             {/* Usage Stats */}
             <div className="mb-8">
-              <h2 
+              <h2
                 className="text-xl font-semibold mb-4 flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"
                 onClick={() => navigate('/pricing')}
               >
@@ -138,7 +138,7 @@ const Dashboard = () => {
                 <span className="text-accent">📊</span> Statistiche
               </h2>
               <div className="grid gap-6 md:grid-cols-2">
-                <div 
+                <div
                   onClick={() => navigate('/contacts')}
                   className="cursor-pointer transition-all hover:scale-105 hover:shadow-lg hover:shadow-primary/20"
                 >
@@ -156,7 +156,7 @@ const Dashboard = () => {
                   </Card>
                 </div>
 
-                <div 
+                <div
                   onClick={() => navigate('/searches')}
                   className="cursor-pointer transition-all hover:scale-105 hover:shadow-lg hover:shadow-secondary/20"
                 >

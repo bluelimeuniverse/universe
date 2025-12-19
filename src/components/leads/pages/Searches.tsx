@@ -35,25 +35,25 @@ const Searches = () => {
     setIsLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         throw new Error("Utente non autenticato");
       }
 
       // First get all user's searches
-      const searchesRes = await supabase
-        .from('searches')
+      const searchesRes: any = await supabase
+        .from('searches' as any)
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at' as any, { ascending: false });
 
       if (searchesRes.error) throw searchesRes.error;
 
       const searchIds = (searchesRes.data || []).map(s => s.id);
 
       // Then get contacts for those searches
-      const contactsRes = searchIds.length > 0 
-        ? await supabase.from('contacts').select('id, search_id').in('search_id', searchIds)
+      const contactsRes: any = searchIds.length > 0
+        ? await supabase.from('contacts' as any).select('id, search_id' as any).in('search_id' as any, searchIds)
         : { data: [], error: null };
 
       if (contactsRes.error) throw contactsRes.error;
@@ -74,10 +74,10 @@ const Searches = () => {
 
   const exportSearchContacts = async (searchId: string, searchQuery: string) => {
     try {
-      const { data, error } = await supabase
-        .from('contacts')
+      const { data, error }: any = await supabase
+        .from('contacts' as any)
         .select('*')
-        .eq('search_id', searchId);
+        .eq('search_id' as any, searchId);
 
       if (error) throw error;
 

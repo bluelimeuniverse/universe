@@ -47,7 +47,7 @@ const Auth = () => {
         toast({
           variant: 'destructive',
           title: 'Errore di validazione',
-          description: error.errors[0].message,
+          description: error.issues[0].message,
         });
       }
       return false;
@@ -56,7 +56,7 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateInputs()) return;
 
     setLoading(true);
@@ -87,7 +87,7 @@ const Auth = () => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateInputs()) return;
 
     setLoading(true);
@@ -103,8 +103,8 @@ const Auth = () => {
       toast({
         variant: 'destructive',
         title: 'Errore di accesso',
-        description: error.message === 'Invalid login credentials' 
-          ? 'Credenziali non valide' 
+        description: error.message === 'Invalid login credentials'
+          ? 'Credenziali non valide'
           : error.message,
       });
     }
@@ -125,7 +125,7 @@ const Auth = () => {
               <TabsTrigger value="signin">Accedi</TabsTrigger>
               <TabsTrigger value="signup">Registrati</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
@@ -155,7 +155,7 @@ const Auth = () => {
                 </Button>
               </form>
             </TabsContent>
-            
+
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">

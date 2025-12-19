@@ -50,7 +50,7 @@ export default function BatchDetails() {
   const { batchId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [batch, setBatch] = useState<BatchDetails | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -58,9 +58,9 @@ export default function BatchDetails() {
 
   useEffect(() => {
     if (!batchId) return;
-    
+
     loadBatchData();
-    
+
     // Auto-refresh SOLO se il batch è in elaborazione
     // Se è completato, disabilita il refresh per risparmiare query
     if (batch?.status === 'running') {
@@ -72,8 +72,8 @@ export default function BatchDetails() {
   const loadBatchData = async () => {
     try {
       // Load batch info
-      const { data: batchData, error: batchError } = await supabase
-        .from('search_batches')
+      const { data: batchData, error: batchError }: any = await supabase
+        .from('search_batches' as any)
         .select('*')
         .eq('id', batchId)
         .single();
@@ -82,11 +82,11 @@ export default function BatchDetails() {
       setBatch(batchData);
 
       // Load jobs
-      const { data: jobsData, error: jobsError } = await supabase
-        .from('search_jobs')
+      const { data: jobsData, error: jobsError }: any = await supabase
+        .from('search_jobs' as any)
         .select('*')
         .eq('batch_id', batchId)
-        .order('created_at', { ascending: true });
+        .order('created_at' as any, { ascending: true });
 
       if (jobsError) throw jobsError;
 
@@ -96,11 +96,11 @@ export default function BatchDetails() {
         .map(j => j.search_id);
 
       if (completedSearchIds.length > 0) {
-        const { data: contactsData, error: contactsError } = await supabase
-          .from('contacts')
+        const { data: contactsData, error: contactsError }: any = await supabase
+          .from('contacts' as any)
           .select('*')
-          .in('search_id', completedSearchIds)
-          .order('created_at', { ascending: false });
+          .in('search_id' as any, completedSearchIds)
+          .order('created_at' as any, { ascending: false });
 
         if (contactsError) throw contactsError;
         setContacts(contactsData || []);
@@ -217,7 +217,7 @@ export default function BatchDetails() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Progress value={getProgress()} className="h-3" />
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-4 bg-primary/10 rounded-lg">
                 <div className="text-3xl font-bold text-primary">{contacts.length}</div>

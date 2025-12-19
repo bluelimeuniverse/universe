@@ -69,10 +69,10 @@ const Validate = () => {
   }, []);
 
   const loadValidationHistory = async () => {
-    const { data, error } = await supabase
-      .from("validation_lists")
+    const { data, error }: any = await supabase
+      .from("validation_lists" as any)
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at" as any, { ascending: false });
 
     if (error) {
       console.error("Error loading history:", error);
@@ -84,14 +84,14 @@ const Validate = () => {
 
   const deleteList = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent navigation when clicking delete
-    
+
     try {
       // Delete results first
-      await supabase.from("validation_results").delete().eq("validation_list_id", id);
+      await supabase.from("validation_results" as any).delete().eq("validation_list_id", id);
       // Delete contacts
-      await supabase.from("contacts").delete().eq("list_id", id);
+      await supabase.from("contacts" as any).delete().eq("list_id", id);
       // Delete list
-      const { error } = await supabase.from("validation_lists").delete().eq("id", id);
+      const { error } = await supabase.from("validation_lists" as any).delete().eq("id", id);
 
       if (error) throw error;
 
@@ -113,7 +113,7 @@ const Validate = () => {
   const handlePasteEmails = () => {
     const lines = pastedEmails.split('\n').map(line => line.trim()).filter(line => line.length > 0);
     const emailList: string[] = [];
-    
+
     lines.forEach(line => {
       // Extract emails from each line (in case there's text around them)
       const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
@@ -155,7 +155,7 @@ const Validate = () => {
         });
 
         setEmails([...new Set(emailList)]);
-        
+
         // Auto-set list name from file name if empty
         if (!listName && file.name) {
           const nameWithoutExt = file.name.split('.').slice(0, -1).join('.');
@@ -204,15 +204,15 @@ const Validate = () => {
       if (!user) throw new Error("User not authenticated");
 
       // 2. Create List with status 'processing' immediately
-      const { data: list, error: listError } = await supabase
-        .from("validation_lists")
+      const { data: list, error: listError }: any = await supabase
+        .from("validation_lists" as any)
         .insert({
           name: listName,
           user_id: user.id,
           total_emails: emails.length,
           status: 'processing',
           processed_emails: 0
-        })
+        } as any)
         .select()
         .single();
 
@@ -229,18 +229,18 @@ const Validate = () => {
       for (let i = 0; i < contactsData.length; i += batchSize) {
         const batch = contactsData.slice(i, i + batchSize);
         const { error: contactsError } = await supabase
-          .from("contacts")
-          .insert(batch);
-        
+          .from("contacts" as any)
+          .insert(batch as any);
+
         if (contactsError) throw contactsError;
       }
 
       // 4. Trigger Validation Immediately
       const { error: validationError } = await supabase.functions.invoke("validate-batch", {
-        body: { 
-          emails, 
+        body: {
+          emails,
           listName: list.name,
-          existingListId: list.id 
+          existingListId: list.id
         },
       });
 
@@ -253,7 +253,7 @@ const Validate = () => {
 
       // 5. Navigate immediately to results
       navigate(`/validate/${list.id}`);
-      
+
     } catch (error: any) {
       console.error("Error creating list:", error);
       toast({
@@ -308,7 +308,7 @@ const Validate = () => {
         {/* Pick a Source */}
         <Card className="p-6 mb-6 bg-slate-900/50 border-slate-800">
           <h2 className="text-lg font-semibold mb-4 text-white">Scegli una Sorgente</h2>
-          
+
           <div className="space-y-4">
             <Input
               placeholder="Nome lista (es: Lista clienti Q4 2024)"
@@ -329,7 +329,7 @@ const Validate = () => {
                   Carica un file
                 </TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="paste" className="space-y-3">
                 <Textarea
                   placeholder="Incolla le email qui (una per riga o separate da virgole)&#10;esempio@email.com&#10;altro@email.com"
@@ -347,7 +347,7 @@ const Validate = () => {
                   Estrai Email
                 </Button>
               </TabsContent>
-              
+
               <TabsContent value="upload" className="space-y-3">
                 <div className="border-2 border-dashed border-slate-700 rounded-lg p-8 text-center hover:border-slate-600 transition-colors">
                   <Upload className="h-12 w-12 mx-auto mb-4 text-slate-500" />
@@ -394,7 +394,7 @@ const Validate = () => {
                     </div>
                   )}
                 </div>
-                
+
                 <Button
                   onClick={handleValidateNow}
                   disabled={isCreating}
@@ -462,7 +462,7 @@ const Validate = () => {
                       <span>{list.total_emails} email</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <Button
                       size="sm"
@@ -479,9 +479,9 @@ const Validate = () => {
 
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="text-slate-500 hover:text-red-400 hover:bg-red-900/20"
                           onClick={(e) => e.stopPropagation()}
                         >

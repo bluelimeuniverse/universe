@@ -44,7 +44,7 @@ const ValidationResults = () => {
   // Auto-refresh while processing (no extra worker calls)
   useEffect(() => {
     if (!list || list.status !== 'processing') return;
-    
+
     const interval = setInterval(async () => {
       // 1. Force check with Truelist (in case webhook failed)
       // This will check all "processing" lists and update them if Truelist is done
@@ -59,10 +59,10 @@ const ValidationResults = () => {
 
   const loadData = async (initial = false) => {
     if (initial) setLoading(true);
-    
+
     // Load list info
-    const { data: listData } = await supabase
-      .from("validation_lists")
+    const { data: listData }: any = await supabase
+      .from("validation_lists" as any)
       .select("*")
       .eq("id", listId)
       .single();
@@ -72,8 +72,8 @@ const ValidationResults = () => {
     }
 
     // Load results
-    const { data: resultsData } = await supabase
-      .from("validation_results")
+    const { data: resultsData }: any = await supabase
+      .from("validation_results" as any)
       .select("*")
       .eq("validation_list_id", listId);
 
@@ -81,11 +81,11 @@ const ValidationResults = () => {
       setResults(resultsData);
     } else {
       // If no results, load contacts to show them as pending
-      const { data: contactsData } = await supabase
-        .from("contacts")
+      const { data: contactsData }: any = await supabase
+        .from("contacts" as any)
         .select("*")
         .eq("list_id", listId);
-        
+
       if (contactsData) {
         // Map contacts to ValidationResult interface
         const pendingResults: ValidationResult[] = contactsData.map(c => ({
@@ -115,7 +115,7 @@ const ValidationResults = () => {
     try {
       // Delete results first (if cascade not set up, but usually it is)
       const { error: resultsError } = await supabase
-        .from("validation_results")
+        .from("validation_results" as any)
         .delete()
         .eq("validation_list_id", listId);
 
@@ -123,7 +123,7 @@ const ValidationResults = () => {
 
       // Delete list
       const { error: listError } = await supabase
-        .from("validation_lists")
+        .from("validation_lists" as any)
         .delete()
         .eq("id", listId);
 
@@ -150,18 +150,18 @@ const ValidationResults = () => {
     try {
       // Try to delete from validation_results first
       const { error: resultError } = await supabase
-        .from("validation_results")
+        .from("validation_results" as any)
         .delete()
         .eq("id", resultId);
 
       // If it fails or if we are in "pending" mode (using contact IDs), try deleting from contacts
       if (resultError || results.find(r => r.id === resultId)?.result === 'pending') {
-         const { error: contactError } = await supabase
-          .from("contacts")
+        const { error: contactError } = await supabase
+          .from("contacts" as any)
           .delete()
           .eq("id", resultId);
-          
-         if (contactError) throw contactError;
+
+        if (contactError) throw contactError;
       }
 
       setResults(results.filter(r => r.id !== resultId));
@@ -201,7 +201,7 @@ const ValidationResults = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Results");
 
     const fileName = `${list?.name}_${onlyValid ? "valid" : "all"}_${Date.now()}.${format}`;
-    
+
     if (format === 'csv') {
       XLSX.writeFile(workbook, fileName, { bookType: 'csv' });
     } else {
@@ -216,13 +216,13 @@ const ValidationResults = () => {
 
   const startValidation = async () => {
     if (!list || !listId) return;
-    
+
     setIsStartingValidation(true);
-    
+
     try {
       // Get emails from contacts linked to this list
-      const { data: contacts, error: contactsError } = await supabase
-        .from("contacts")
+      const { data: contacts, error: contactsError }: any = await supabase
+        .from("contacts" as any)
         .select("email")
         .eq("list_id", listId)
         .not("email", "is", null);
@@ -245,10 +245,10 @@ const ValidationResults = () => {
 
       // Call validate-batch with existing list
       const { data, error } = await supabase.functions.invoke("validate-batch", {
-        body: { 
-          emails, 
+        body: {
+          emails,
           listName: list.name,
-          existingListId: listId 
+          existingListId: listId
         },
       });
 
@@ -310,7 +310,7 @@ const ValidationResults = () => {
               })}
             </p>
           </div>
-          
+
           <div className="flex gap-3">
             {list.status === "unvalidated" ? (
               <Button
@@ -359,7 +359,7 @@ const ValidationResults = () => {
                 </DropdownMenu>
               </>
             )}
-            
+
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="icon" className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20">

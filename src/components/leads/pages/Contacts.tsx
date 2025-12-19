@@ -39,14 +39,14 @@ const Contacts = () => {
       let hasMore = true;
 
       while (hasMore) {
-        const { data, error } = await supabase
-          .from('contacts')
+        const { data, error }: any = await supabase
+          .from('contacts' as any)
           .select('*')
-          .order('created_at', { ascending: false })
+          .order('created_at' as any, { ascending: false })
           .range(from, from + pageSize - 1);
 
         if (error) throw error;
-        
+
         if (data && data.length > 0) {
           allContacts = [...allContacts, ...data];
           from += pageSize;
@@ -78,12 +78,12 @@ const Contacts = () => {
       Website: c.website || '',
       'Data creazione': new Date(c.created_at).toLocaleString('it-IT'),
     }));
-    
+
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, 'tutti_i_contatti.xlsx');
-    
+
     toast({
       title: "Export completato",
       description: "File scaricato con successo",
@@ -101,7 +101,7 @@ const Contacts = () => {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Torna alla Dashboard
         </Button>
-        
+
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
